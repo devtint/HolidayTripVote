@@ -31,28 +31,49 @@
             --border: #e2e8f0;
         }
 
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 11pt;
-            line-height: 1.6;
+            line-height: 1.5;
             color: var(--dark);
-            background: white;
-            padding: 0;
+            background: #525659;
             margin: 0;
         }
 
         /* Page Layout */
         .page {
             width: 210mm;
-            min-height: 297mm;
+            height: 297mm;
             padding: 20mm 25mm;
-            margin: 0 auto;
+            margin: 20px auto;
             background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            box-sizing: border-box;
+            overflow: hidden;
             page-break-after: always;
+            break-after: page;
         }
 
         .page:last-child {
             page-break-after: auto;
+        }
+
+        @media print {
+            body {
+                background: white;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .page {
+                margin: 0;
+                box-shadow: none;
+            }
         }
 
         /* Cover Page */
@@ -62,8 +83,7 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            min-height: 297mm;
-            padding: 40mm 25mm;
+
         }
 
         .cover-logo {
@@ -342,47 +362,18 @@
             color: var(--secondary);
         }
 
-        /* Footer */
+        /* Footer - Forced to bottom of page */
         .page-footer {
-            position: relative;
-            margin-top: 30px;
+            position: absolute;
+            bottom: 20mm;
+            left: 25mm;
+            right: 25mm;
             padding-top: 15px;
             border-top: 1px solid var(--border);
             font-size: 9pt;
             color: var(--secondary);
             display: flex;
             justify-content: space-between;
-        }
-
-        /* Print styles */
-        @media print {
-            body {
-                print-color-adjust: exact;
-                -webkit-print-color-adjust: exact;
-            }
-
-            .page {
-                width: 100%;
-                padding: 15mm 20mm;
-                margin: 0;
-            }
-
-            .no-print {
-                display: none;
-            }
-        }
-
-        /* Screen styles */
-        @media screen {
-            body {
-                background: #94a3b8;
-                padding: 20px;
-            }
-
-            .page {
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-                margin-bottom: 20px;
-            }
         }
 
         /* Security table icons */
