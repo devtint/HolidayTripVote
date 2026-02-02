@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Live voting results for Holiday Destination Poll - Real-time updates from ThingSpeak IoT">
+    <title>Holiday Destination Vote | Live Results</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-effects">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🗳️</span>
+                    <span class="logo-text">VoteLive</span>
+                </div>
+                <div class="status-badge" id="status-badge">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Connecting...</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section class="hero">
+                <h1 class="title">Holiday Destination Poll</h1>
+                <p class="subtitle">Where should we travel? Cast your vote and watch results update in real-time!</p>
+            </section>
+
+            <section class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-value" id="total-votes">0</span>
+                    <span class="stat-label">Total Votes</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="last-update">--:--</span>
+                    <span class="stat-label">Last Update</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="refresh-countdown">15s</span>
+                    <span class="stat-label">Next Refresh</span>
+                </div>
+            </section>
+
+            <section class="candidates-grid" id="candidates-grid">
+                <!-- Candidate cards will be injected by JavaScript -->
+            </section>
+
+            <section class="winner-banner" id="winner-banner">
+                <div class="winner-content">
+                    <span class="winner-crown">👑</span>
+                    <span class="winner-label">Leading Destination</span>
+                    <span class="winner-name" id="winner-name">--</span>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Powered by <a href="https://thingspeak.com" target="_blank" rel="noopener">ThingSpeak IoT</a> | Course 525 Final Project</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
