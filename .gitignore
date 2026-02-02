@@ -44,7 +44,7 @@ desktop.ini
 *.user
 
 # === WHAT GETS TRACKED ===
-# Only files in /public/ folder will be committed
+# Public UI files in root:
 # - index.html (dashboard UI)
 # - style.css (styling)
 # - script.js (frontend logic - READ API only)
