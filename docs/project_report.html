@@ -892,91 +892,11 @@ python-dotenv>=1.0.0</code></pre>
         </div>
     </div>
 
-    <!-- PAGE 6: SECURITY & SETUP -->
+
+
+    <!-- PAGE 6: FILE STRUCTURE -->
     <div class="page">
-        <h1>6. Security & Configuration</h1>
-
-        <h2>API Key Management</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Key Type</th>
-                    <th>Location</th>
-                    <th>Status</th>
-                    <th>Risk</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Write API Key</td>
-                    <td><code>.env</code> file</td>
-                    <td class="status-secure">✅ Secure</td>
-                    <td>Protected (gitignored)</td>
-                </tr>
-                <tr>
-                    <td>Read API Key</td>
-                    <td><code>script.js</code></td>
-                    <td class="status-public">⚠️ Public</td>
-                    <td>Acceptable (read-only)</td>
-                </tr>
-                <tr>
-                    <td>Channel ID</td>
-                    <td>Both</td>
-                    <td class="status-public">⚠️ Public</td>
-                    <td>Cannot modify data</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h2>Files NOT Tracked by Git</h2>
-        <div class="info-box warning">
-            <div class="info-box-title">⚠️ Gitignored Files</div>
-            <ul style="margin-top: 10px;">
-                <li><code>.env</code> — Contains sensitive API keys</li>
-                <li><code>python/votes.csv</code> — Local vote audit log</li>
-                <li><code>python/votes.json</code> — Local vote state</li>
-            </ul>
-        </div>
-
-        <h2>Environment Setup</h2>
-        <h3>Step 1: Copy Template</h3>
-        <pre><code>cp .env.example .env</code></pre>
-
-        <h3>Step 2: Edit .env File</h3>
-        <pre><code>THINGSPEAK_WRITE_API_KEY=your_write_key_here
-THINGSPEAK_READ_API_KEY=your_read_key_here
-THINGSPEAK_CHANNEL_ID=your_channel_id_here</code></pre>
-
-        <h3>Step 3: Install Dependencies</h3>
-        <pre><code>cd python
-pip install -r requirements.txt</code></pre>
-
-        <h2>Running the System</h2>
-        <div class="card-grid">
-            <div class="card">
-                <div class="card-title">Start Python Bridge</div>
-                <div class="card-desc"><code>python bridge.py COM3</code></div>
-            </div>
-            <div class="card">
-                <div class="card-title">Start Web Server</div>
-                <div class="card-desc"><code>python -m http.server 8000</code></div>
-            </div>
-        </div>
-
-        <div class="info-box success">
-            <div class="info-box-title">✅ Access Dashboard</div>
-            <p>Open browser: <strong>http://localhost:8000</strong></p>
-        </div>
-
-        <div class="page-footer">
-            <span>Holiday Destination Voting System</span>
-            <span>Page 6</span>
-        </div>
-    </div>
-
-    <!-- PAGE 7: FILE STRUCTURE -->
-    <div class="page">
-        <h1>7. Project Structure</h1>
+        <h1>6. Project Structure</h1>
 
         <h2>Complete File Tree</h2>
         <div class="diagram">
@@ -1056,13 +976,13 @@ HolidayTripVote/
 
         <div class="page-footer">
             <span>Holiday Destination Voting System</span>
-            <span>Page 7</span>
+            <span>Page 6</span>
         </div>
     </div>
 
-    <!-- PAGE 8: CONCLUSION -->
+    <!-- PAGE 7: CONCLUSION -->
     <div class="page">
-        <h1>8. Conclusion</h1>
+        <h1>7. Conclusion</h1>
 
         <h2>Project Summary</h2>
         <p>
@@ -1139,7 +1059,7 @@ HolidayTripVote/
 
         <div class="page-footer">
             <span>Holiday Destination Voting System</span>
-            <span>Page 8</span>
+            <span>Page 7</span>
         </div>
     </div>
 
