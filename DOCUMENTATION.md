@@ -74,23 +74,51 @@ This is an **IoT-based voting system** that allows users to vote for their prefe
 | Component | Quantity | Purpose |
 |-----------|----------|---------|
 | Arduino Uno/Nano | 1 | Microcontroller |
-| Push Buttons | 4 | Vote input |
-| Resistors (10kΩ) | 4 | Pull-down resistors |
+| Push Buttons | 4 | Vote input (one per candidate) |
+| LED | 1 | Vote confirmation indicator |
+| Buzzer (Piezo) | 1 | Audio feedback on vote |
+| 7-Segment Display | 1 | Shows voted candidate number (1-4) |
+| Resistors (220Ω) | 7 | Current limiting for 7-segment |
 | Breadboard | 1 | Circuit prototyping |
-| USB Cable | 1 | Serial communication |
-| Jumper Wires | ~20 | Connections |
+| USB Cable | 1 | Power & serial communication |
+| Jumper Wires | ~30 | Connections |
+
+### Hardware Feedback System
+| Component | Trigger | Duration | Purpose |
+|-----------|---------|----------|--------|
+| LED (Pin 13) | On vote | 500ms | Notifies button was pressed |
+| Buzzer (Pin 11) | On vote | 100ms | Audio confirmation beep |
+| 7-Segment | On vote | 2000ms | Shows which candidate (1-4) was voted |
 
 ### Wiring Diagram
 ```
 Arduino Pin Configuration:
-─────────────────────────
-  Pin 2 ──► Button 1 (Japan)
-  Pin 3 ──► Button 2 (Germany)
-  Pin 4 ──► Button 3 (Switzerland)
-  Pin 5 ──► Button 4 (Norway)
-  
-  Each button: Pin → Button → GND
-               Pin → 10kΩ Resistor → 5V (Pull-up)
+══════════════════════════════════════════════════════════════
+
+  BUTTONS (INPUT_PULLUP):
+  ─────────────────────────
+  Pin 2  ──► Button 1 (Japan)        ──► GND
+  Pin 3  ──► Button 2 (Germany)      ──► GND
+  Pin 4  ──► Button 3 (Switzerland)  ──► GND
+  Pin 5  ──► Button 4 (Norway)       ──► GND
+
+  7-SEGMENT DISPLAY (Common Cathode):
+  ─────────────────────────
+  Pin 6  ──► Segment A
+  Pin 7  ──► Segment B
+  Pin 8  ──► Segment C
+  Pin 9  ──► Segment D
+  Pin 10 ──► Segment E
+  Pin A0 ──► Segment F
+  Pin A1 ──► Segment G
+  GND    ──► Common Cathode
+
+  OUTPUT INDICATORS:
+  ─────────────────────────
+  Pin 11 ──► Buzzer (+)  ──► GND
+  Pin 13 ──► LED (+)     ──► 220Ω ──► GND
+
+══════════════════════════════════════════════════════════════
 ```
 
 ---
@@ -98,9 +126,12 @@ Arduino Pin Configuration:
 ## 💻 Software Components
 
 ### 1. Arduino Firmware (`arduino/voting_system/voting_system.ino`)
-- Monitors 4 button inputs
-- Debouncing to avoid false triggers
+- Monitors 4 button inputs with INPUT_PULLUP
+- Software debouncing (200ms) to avoid false triggers
 - Sends `VOTE,X` command via Serial (9600 baud)
+- **LED feedback:** Lights up for 500ms on vote
+- **Buzzer feedback:** Beeps (1000Hz, 100ms) on vote
+- **7-Segment display:** Shows candidate number for 2 seconds
 
 ### 2. Python Bridge (`python/bridge.py`)
 - Reads Serial data from Arduino
@@ -129,7 +160,10 @@ Arduino Pin Configuration:
          ▼
 2. ARDUINO DETECTS BUTTON PRESS
          │
-         ├── Debounce check (50ms)
+         ├── Debounce check (200ms)
+         ├── LED lights up (500ms)
+         ├── Buzzer beeps (100ms)
+         ├── 7-Segment shows candidate number (2s)
          │
          ▼
 3. ARDUINO SENDS "VOTE,X" VIA SERIAL

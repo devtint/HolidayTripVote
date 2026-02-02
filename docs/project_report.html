@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holiday Destination Voting System - Project Report</title>
+    <style>
+        /* ========================================
+           PDF PRINT STYLES
+           ======================================== */
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #64748b;
+            --accent: #0ea5e9;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: var(--dark);
+            background: white;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Page Layout */
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm 25mm;
+            margin: 0 auto;
+            background: white;
+            page-break-after: always;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        /* Cover Page */
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 297mm;
+            padding: 40mm 25mm;
+        }
+
+        .cover-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+        }
+
+        .cover-logo svg {
+            width: 50px;
+            height: 50px;
+            fill: white;
+        }
+
+        .cover-title {
+            font-size: 32pt;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .cover-subtitle {
+            font-size: 14pt;
+            color: var(--secondary);
+            margin-bottom: 50px;
+        }
+
+        .cover-divider {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
+            margin-bottom: 50px;
+        }
+
+        .cover-meta {
+            font-size: 11pt;
+            color: var(--secondary);
+        }
+
+        .cover-meta p {
+            margin: 8px 0;
+        }
+
+        .cover-meta strong {
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        /* Headers */
+        h1 {
+            font-size: 22pt;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        h2 {
+            font-size: 14pt;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 25px 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-size: 12pt;
+            font-weight: 600;
+            color: var(--secondary);
+            margin: 20px 0 10px 0;
+        }
+
+        /* Paragraphs */
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 10pt;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:nth-child(even) {
+            background: var(--light);
+        }
+
+        /* Code blocks */
+        pre,
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 9pt;
+        }
+
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 15px 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            line-height: 1.5;
+        }
+
+        code {
+            background: var(--light);
+            color: var(--primary);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        /* Lists */
+        ul,
+        ol {
+            margin: 10px 0 15px 25px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        /* Diagram box */
+        .diagram {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .diagram pre {
+            background: white;
+            color: var(--dark);
+            text-align: left;
+            font-size: 9pt;
+            border: 1px solid var(--border);
+        }
+
+        /* Info boxes */
+        .info-box {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid;
+        }
+
+        .info-box.note {
+            background: #eff6ff;
+            border-color: var(--primary);
+        }
+
+        .info-box.warning {
+            background: #fffbeb;
+            border-color: var(--warning);
+        }
+
+        .info-box.success {
+            background: #ecfdf5;
+            border-color: var(--success);
+        }
+
+        .info-box-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        /* Flow diagram */
+        .flow-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .flow-number {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .flow-content {
+            flex: 1;
+            background: var(--light);
+            padding: 12px 18px;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .flow-arrow {
+            width: 32px;
+            text-align: center;
+            color: var(--secondary);
+            font-size: 20px;
+        }
+
+        /* Component cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .card {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 18px;
+            border: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 11pt;
+        }
+
+        .card-desc {
+            font-size: 10pt;
+            color: var(--secondary);
+        }
+
+        /* Footer */
+        .page-footer {
+            position: relative;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+            font-size: 9pt;
+            color: var(--secondary);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .page {
+                width: 100%;
+                padding: 15mm 20mm;
+                margin: 0;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
+
+        /* Screen styles */
+        @media screen {
+            body {
+                background: #94a3b8;
+                padding: 20px;
+            }
+
+            .page {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+                margin-bottom: 20px;
+            }
+        }
+
+        /* Security table icons */
+        .status-secure {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .status-public {
+            color: var(--warning);
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- COVER PAGE -->
+    <div class="page cover-page">
+        <div class="cover-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 11l3 3L22 4" />
+                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+            </svg>
+        </div>
+
+        <h1 class="cover-title">Holiday Destination<br>Voting System</h1>
+        <p class="cover-subtitle">IoT-Based Real-Time Voting with Arduino & ThingSpeak</p>
+
+        <div class="cover-divider"></div>
+
+        <div class="cover-meta">
+            <p><strong>Course:</strong> 525 Final Project</p>
+            <p><strong>Date:</strong> February 2026</p>
+            <p><strong>Technology Stack:</strong> Arduino • Python • ThingSpeak • HTML/CSS/JS</p>
+            <p><strong>Repository:</strong> github.com/devtint/HolidayTripVote</p>
+        </div>
+    </div>
+
+    <!-- PAGE 1: OVERVIEW -->
+    <div class="page">
+        <h1>1. Project Overview</h1>
+
+        <h2>Introduction</h2>
+        <p>
+            This project implements an <strong>IoT-based voting system</strong> that enables users to vote for their
+            preferred holiday destination using physical buttons connected to an Arduino microcontroller.
+            Votes are processed in real-time by a Python bridge application and uploaded to the ThingSpeak
+            cloud platform for storage and visualization.
+        </p>
+
+        <h2>Voting Options</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Button</th>
+                    <th>Destination</th>
+                    <th>ThingSpeak Field</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Button 1</td>
+                    <td>🇯🇵 Japan</td>
+                    <td>field1</td>
+                </tr>
+                <tr>
+                    <td>Button 2</td>
+                    <td>🇩🇪 Germany</td>
+                    <td>field2</td>
+                </tr>
+                <tr>
+                    <td>Button 3</td>
+                    <td>🇨🇭 Switzerland</td>
+                    <td>field3</td>
+                </tr>
+                <tr>
+                    <td>Button 4</td>
+                    <td>🇳🇴 Norway</td>
+                    <td>field4</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Key Features</h2>
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-title">🔘 Physical Voting</div>
+                <div class="card-desc">Four hardware buttons for intuitive, tangible voting experience</div>
+            </div>
+            <div class="card">
+                <div class="card-title">⚡ Real-Time Updates</div>
+                <div class="card-desc">Votes appear on web dashboard within seconds of being cast</div>
+            </div>
+            <div class="card">
+                <div class="card-title">☁️ Cloud Storage</div>
+                <div class="card-desc">All votes stored on ThingSpeak for persistence and accessibility</div>
+            </div>
+            <div class="card">
+                <div class="card-title">📊 Visual Dashboard</div>
+                <div class="card-desc">Modern web interface with live charts and percentages</div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Holiday Destination Voting System</span>
+            <span>Page 1</span>
+        </div>
+    </div>
+
+    <!-- PAGE 2: ARCHITECTURE -->
+    <div class="page">
+        <h1>2. System Architecture</h1>
+
+        <h2>Architecture Diagram</h2>
+        <div class="diagram">
+            <pre>
+┌─────────────────┐         ┌─────────────────┐         ┌─────────────────┐
+│                 │  Serial │                 │   HTTP  │                 │
+│     ARDUINO     │────────▶│     PYTHON      │────────▶│   THINGSPEAK    │
+│    (Hardware)   │  USB    │    (Bridge)     │   API   │    (Cloud)      │
+│                 │ VOTE,X  │                 │         │                 │
+└─────────────────┘         └─────────────────┘         └─────────────────┘
+        │                          │                           │
+        │                          │                           │
+        ▼                          ▼                           ▼
+   ┌─────────┐              ┌─────────────┐             ┌─────────────┐
+   │ 4 Push  │              │ Local Files │             │    Web      │
+   │ Buttons │              │ votes.json  │             │  Dashboard  │
+   │         │              │ votes.csv   │             │ index.html  │
+   └─────────┘              └─────────────┘             └─────────────┘
+            </pre>
+        </div>
+
+        <h2>Component Communication</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Protocol</th>
+                    <th>Data Format</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Arduino</td>
+                    <td>Python Bridge</td>
+                    <td>Serial (USB)</td>
+                    <td><code>VOTE,X</code> (X = 1-4)</td>
+                </tr>
+                <tr>
+                    <td>Python Bridge</td>
+                    <td>ThingSpeak</td>
+                    <td>HTTP POST</td>
+                    <td>Form data with API key</td>
+                </tr>
+                <tr>
+                    <td>Web Dashboard</td>
+                    <td>ThingSpeak</td>
+                    <td>HTTP GET</td>
+                    <td>JSON response</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Technology Stack</h2>
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-title">Hardware Layer</div>
+                <div class="card-desc">Arduino Uno/Nano, Buttons, LED, Buzzer, 7-Segment Display</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Firmware Layer</div>
+                <div class="card-desc">C++ Arduino code with button debouncing</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Bridge Layer</div>
+                <div class="card-desc">Python 3 with pyserial, requests, python-dotenv</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Cloud Layer</div>
+                <div class="card-desc">ThingSpeak IoT platform (REST API)</div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Holiday Destination Voting System</span>
+            <span>Page 2</span>
+        </div>
+    </div>
+
+    <!-- PAGE 3: DATA FLOW -->
+    <div class="page">
+        <h1>3. Data Flow</h1>
+
+        <h2>Vote Processing Workflow</h2>
+        <p>When a user casts a vote, the following sequence of events occurs:</p>
+
+        <div class="flow-container">
+            <div class="flow-step">
+                <div class="flow-number">1</div>
+                <div class="flow-content">
+                    <strong>Button Press</strong><br>
+                    User presses one of 4 physical buttons on the Arduino
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-arrow">↓</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">2</div>
+                <div class="flow-content">
+                    <strong>Debounce & Feedback</strong><br>
+                    Arduino debounces (200ms), LED lights up, Buzzer beeps, 7-Segment shows candidate
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-arrow">↓</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">3</div>
+                <div class="flow-content">
+                    <strong>Serial Transmission</strong><br>
+                    Arduino sends <code>VOTE,X</code> command via USB at 9600 baud
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-arrow">↓</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">4</div>
+                <div class="flow-content">
+                    <strong>Python Processing</strong><br>
+                    Bridge parses vote, increments counter, logs to CSV, saves to JSON
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-arrow">↓</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">5</div>
+                <div class="flow-content">
+                    <strong>Cloud Upload</strong><br>
+                    Every 15 seconds, votes are uploaded to ThingSpeak via HTTP POST
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-arrow">↓</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">6</div>
+                <div class="flow-content">
+                    <strong>Dashboard Display</strong><br>
+                    Web page fetches data via GET request and updates visualizations
+                </div>
+            </div>
+        </div>
+
+        <h2>Data Storage</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Storage Type</th>
+                    <th>Location</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>votes.json</td>
+                    <td>Local (Python folder)</td>
+                    <td>Current vote state for crash recovery</td>
+                </tr>
+                <tr>
+                    <td>votes.csv</td>
+                    <td>Local (Python folder)</td>
+                    <td>Audit log with timestamps</td>
+                </tr>
+                <tr>
+                    <td>ThingSpeak Channel</td>
+                    <td>Cloud</td>
+                    <td>Persistent storage & API access</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="page-footer">
+            <span>Holiday Destination Voting System</span>
+            <span>Page 3</span>
+        </div>
+    </div>
+
+    <!-- PAGE 4: HARDWARE -->
+    <div class="page">
+        <h1>4. Hardware Setup</h1>
+
+        <h2>Required Components</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Quantity</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Arduino Uno or Nano</td>
+                    <td>1</td>
+                    <td>Main microcontroller</td>
+                </tr>
+                <tr>
+                    <td>Push Buttons (Momentary)</td>
+                    <td>4</td>
+                    <td>Vote input (one per candidate)</td>
+                </tr>
+                <tr>
+                    <td>LED</td>
+                    <td>1</td>
+                    <td>Vote confirmation indicator</td>
+                </tr>
+                <tr>
+                    <td>Buzzer (Piezo)</td>
+                    <td>1</td>
+                    <td>Audio feedback on vote</td>
+                </tr>
+                <tr>
+                    <td>7-Segment Display</td>
+                    <td>1</td>
+                    <td>Shows voted candidate number (1-4)</td>
+                </tr>
+                <tr>
+                    <td>Resistors (220Ω)</td>
+                    <td>7</td>
+                    <td>Current limiting for 7-segment</td>
+                </tr>
+                <tr>
+                    <td>Breadboard</td>
+                    <td>1</td>
+                    <td>Circuit prototyping</td>
+                </tr>
+                <tr>
+                    <td>USB Cable</td>
+                    <td>1</td>
+                    <td>Power & serial communication</td>
+                </tr>
+                <tr>
+                    <td>Jumper Wires</td>
+                    <td>~30</td>
+                    <td>Connections</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Hardware Feedback System</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Trigger</th>
+                    <th>Duration</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>LED (Pin 13)</td>
+                    <td>On vote</td>
+                    <td>500ms</td>
+                    <td>Notifies button was pressed</td>
+                </tr>
+                <tr>
+                    <td>Buzzer (Pin 11)</td>
+                    <td>On vote</td>
+                    <td>100ms</td>
+                    <td>Audio confirmation beep</td>
+                </tr>
+                <tr>
+                    <td>7-Segment</td>
+                    <td>On vote</td>
+                    <td>2000ms</td>
+                    <td>Shows which candidate (1-4) was voted</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Pin Configuration</h2>
+        <div class="diagram">
+            <pre>
+    ARDUINO UNO PIN LAYOUT
+    ════════════════════════════════════════════════════════
+
+    BUTTONS (INPUT_PULLUP):
+        Pin 2  ──► Button 1 (Japan)        ──► GND
+        Pin 3  ──► Button 2 (Germany)      ──► GND
+        Pin 4  ──► Button 3 (Switzerland)  ──► GND
+        Pin 5  ──► Button 4 (Norway)       ──► GND
+
+    7-SEGMENT DISPLAY (Common Cathode):
+        Pin 6  ──► Segment A
+        Pin 7  ──► Segment B
+        Pin 8  ──► Segment C
+        Pin 9  ──► Segment D
+        Pin 10 ──► Segment E
+        Pin A0 ──► Segment F
+        Pin A1 ──► Segment G
+        GND    ──► Common Cathode
+
+    OUTPUT INDICATORS:
+        Pin 11 ──► Buzzer (+)  ──► GND
+        Pin 13 ──► LED (+)     ──► 220Ω ──► GND
+
+    ════════════════════════════════════════════════════════
+            </pre>
+        </div>
+
+        <div class="info-box note">
+            <div class="info-box-title">📌 INPUT_PULLUP Mode</div>
+            <p>Buttons use internal pull-up resistors. When pressed, pin reads LOW; when released, reads HIGH.</p>
+        </div>
+
+        <div class="page-footer">
+            <span>Holiday Destination Voting System</span>
+            <span>Page 4</span>
+        </div>
+    </div>
+
+    <!-- PAGE 5: SOFTWARE -->
+    <div class="page">
+        <h1>5. Software Components</h1>
+
+        <h2>5.1 Arduino Firmware</h2>
+        <p><strong>File:</strong> <code>arduino/voting_system/voting_system.ino</code></p>
+
+        <h3>Key Features</h3>
+        <ul>
+            <li>Monitors 4 digital input pins with INPUT_PULLUP</li>
+            <li>Software debouncing (200ms delay)</li>
+            <li>Sends formatted vote commands via Serial (9600 baud)</li>
+            <li><strong>LED feedback:</strong> Lights up for 500ms on vote</li>
+            <li><strong>Buzzer feedback:</strong> Beeps (1000Hz, 100ms) on vote</li>
+            <li><strong>7-Segment display:</strong> Shows candidate number for 2 seconds</li>
+        </ul>
+
+        <h3>Serial Output Format</h3>
+        <pre><code>READY           // Sent on startup
+VOTE,1          // Japan vote
+VOTE,2          // Germany vote
+VOTE,3          // Switzerland vote
+VOTE,4          // Norway vote</code></pre>
+
+        <h2>5.2 Python Bridge</h2>
+        <p><strong>File:</strong> <code>python/bridge.py</code></p>
+
+        <h3>Dependencies</h3>
+        <pre><code>pyserial>=3.5
+requests>=2.28.0
+python-dotenv>=1.0.0</code></pre>
+
+        <h3>Key Functions</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Function</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>fetch_votes_from_thingspeak()</code></td>
+                    <td>Sync votes from cloud on startup</td>
+                </tr>
+                <tr>
+                    <td><code>process_vote(line)</code></td>
+                    <td>Parse and count incoming votes</td>
+                </tr>
+                <tr>
+                    <td><code>upload_to_thingspeak()</code></td>
+                    <td>Send votes to cloud</td>
+                </tr>
+                <tr>
+                    <td><code>log_vote(candidate_id)</code></td>
+                    <td>Write to CSV audit log</td>
+                </tr>
+                <tr>
+                    <td><code>save_votes()</code></td>
+                    <td>Save state to JSON backup</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>5.3 Web Dashboard</h2>
+        <p><strong>Files:</strong> <code>index.html</code>, <code>style.css</code>, <code>script.js</code></p>
+
+        <h3>Features</h3>
+        <ul>
+            <li>Real-time vote display with auto-refresh</li>
+            <li>Visual bar chart representation</li>
+            <li>Percentage calculations</li>
+            <li>Responsive design for all devices</li>
+        </ul>
+
+        <div class="page-footer">
+            <span>Holiday Destination Voting System</span>
+            <span>Page 5</span>
+        </div>
+    </div>
+
+    <!-- PAGE 6: SECURITY & SETUP -->
+    <div class="page">
+        <h1>6. Security & Configuration</h1>
+
+        <h2>API Key Management</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Key Type</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Risk</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Write API Key</td>
+                    <td><code>.env</code> file</td>
+                    <td class="status-secure">✅ Secure</td>
+                    <td>Protected (gitignored)</td>
+                </tr>
+                <tr>
+                    <td>Read API Key</td>
+                    <td><code>script.js</code></td>
+                    <td class="status-public">⚠️ Public</td>
+                    <td>Acceptable (read-only)</td>
+                </tr>
+                <tr>
+                    <td>Channel ID</td>
+                    <td>Both</td>
+                    <td class="status-public">⚠️ Public</td>
+                    <td>Cannot modify data</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Files NOT Tracked by Git</h2>
+        <div class="info-box warning">
+            <div class="info-box-title">⚠️ Gitignored Files</div>
+            <ul style="margin-top: 10px;">
+                <li><code>.env</code> — Contains sensitive API keys</li>
+                <li><code>python/votes.csv</code> — Local vote audit log</li>
+                <li><code>python/votes.json</code> — Local vote state</li>
+            </ul>
+        </div>
+
+        <h2>Environment Setup</h2>
+        <h3>Step 1: Copy Template</h3>
+        <pre><code>cp .env.example .env</code></pre>
+
+        <h3>Step 2: Edit .env File</h3>
+        <pre><code>THINGSPEAK_WRITE_API_KEY=your_write_key_here
+THINGSPEAK_READ_API_KEY=your_read_key_here
+THINGSPEAK_CHANNEL_ID=your_channel_id_here</code></pre>
+
+        <h3>Step 3: Install Dependencies</h3>
+        <pre><code>cd python
+pip install -r requirements.txt</code></pre>
+
+        <h2>Running the System</h2>
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-title">Start Python Bridge</div>
+                <div class="card-desc"><code>python bridge.py COM3</code></div>
+            </div>
+            <div class="card">
+                <div class="card-title">Start Web Server</div>
+                <div class="card-desc"><code>python -m http.server 8000</code></div>
+            </div>
+        </div>
+
+        <div class="info-box success">
+            <div class="info-box-title">✅ Access Dashboard</div>
+            <p>Open browser: <strong>http://localhost:8000</strong></p>
+        </div>
+
+        <div class="page-footer">
+            <span>Holiday Destination Voting System</span>
+            <span>Page 6</span>
+        </div>
+    </div>
+
+    <!-- PAGE 7: FILE STRUCTURE -->
+    <div class="page">
+        <h1>7. Project Structure</h1>
+
+        <h2>Complete File Tree</h2>
+        <div class="diagram">
+            <pre>
+HolidayTripVote/
+│
+├── 📄 index.html              # Web dashboard UI
+├── 📄 style.css               # Dashboard styling
+├── 📄 script.js               # Dashboard logic (uses Read API)
+│
+├── 📄 README.md               # Quick start guide
+├── 📄 DOCUMENTATION.md        # Technical documentation (Markdown)
+├── 📄 .env.example            # Environment template
+├── 📄 .gitignore              # Git ignore rules
+│
+├── 📁 docs/
+│   └── 📄 project_report.html # This document (print-ready)
+│
+├── 📁 arduino/
+│   └── 📁 voting_system/
+│       └── 📄 voting_system.ino   # Arduino firmware
+│
+├── 📁 python/
+│   ├── 📄 bridge.py           # Python bridge script
+│   ├── 📄 requirements.txt    # Python dependencies
+│   ├── 📄 votes.json          # (gitignored) Vote state
+│   └── 📄 votes.csv           # (gitignored) Audit log
+│
+└── 📄 .env                    # (gitignored) API keys
+            </pre>
+        </div>
+
+        <h2>ThingSpeak Channel Configuration</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Name</th>
+                    <th>Data Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>field1</td>
+                    <td>Japan</td>
+                    <td>Integer (vote count)</td>
+                </tr>
+                <tr>
+                    <td>field2</td>
+                    <td>Germany</td>
+                    <td>Integer (vote count)</td>
+                </tr>
+                <tr>
+                    <td>field3</td>
+                    <td>Switzerland</td>
+                    <td>Integer (vote count)</td>
+                </tr>
+                <tr>
+                    <td>field4</td>
+                    <td>Norway</td>
+                    <td>Integer (vote count)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Rate Limits (Free Tier)</h2>
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-title">Write Operations</div>
+                <div class="card-desc">1 request per 15 seconds (minimum)</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Read Operations</div>
+                <div class="card-desc">No rate limit for GET requests</div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Holiday Destination Voting System</span>
+            <span>Page 7</span>
+        </div>
+    </div>
+
+    <!-- PAGE 8: CONCLUSION -->
+    <div class="page">
+        <h1>8. Conclusion</h1>
+
+        <h2>Project Summary</h2>
+        <p>
+            This Holiday Destination Voting System successfully demonstrates the integration of
+            hardware (Arduino), software (Python), cloud services (ThingSpeak), and web technologies
+            (HTML/CSS/JavaScript) to create a complete IoT solution.
+        </p>
+
+        <h2>Key Achievements</h2>
+        <ul>
+            <li>✅ Real-time vote processing with sub-second response times</li>
+            <li>✅ Secure API key management using environment variables</li>
+            <li>✅ Cloud-based storage for data persistence</li>
+            <li>✅ Modern, responsive web dashboard</li>
+            <li>✅ Complete audit trail with CSV logging</li>
+            <li>✅ Crash recovery with local JSON backup</li>
+        </ul>
+
+        <h2>Technologies Used</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Layer</th>
+                    <th>Technology</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Hardware</td>
+                    <td>Arduino Uno</td>
+                    <td>Physical input handling</td>
+                </tr>
+                <tr>
+                    <td>Firmware</td>
+                    <td>C++ (Arduino)</td>
+                    <td>Button detection & serial output</td>
+                </tr>
+                <tr>
+                    <td>Bridge</td>
+                    <td>Python 3</td>
+                    <td>Serial processing & API calls</td>
+                </tr>
+                <tr>
+                    <td>Cloud</td>
+                    <td>ThingSpeak</td>
+                    <td>Data storage & REST API</td>
+                </tr>
+                <tr>
+                    <td>Frontend</td>
+                    <td>HTML/CSS/JS</td>
+                    <td>User interface & visualization</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Future Improvements</h2>
+        <ul>
+            <li>Add LCD display on Arduino for local vote feedback</li>
+            <li>Implement voter authentication (RFID/fingerprint)</li>
+            <li>Add more destinations with expandable architecture</li>
+            <li>Create mobile app for remote monitoring</li>
+        </ul>
+
+        <div
+            style="text-align: center; margin-top: 50px; padding: 30px; background: var(--light); border-radius: 12px;">
+            <p style="font-size: 14pt; font-weight: 600; color: var(--primary); margin-bottom: 10px;">
+                🗳️ Holiday Destination Voting System
+            </p>
+            <p style="color: var(--secondary);">
+                Course 525 Final Project • February 2026
+            </p>
+        </div>
+
+        <div class="page-footer">
+            <span>Holiday Destination Voting System</span>
+            <span>Page 8</span>
+        </div>
+    </div>
+
+</body>
+
+</html>
