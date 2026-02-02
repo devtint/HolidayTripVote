@@ -9,7 +9,7 @@
 const CONFIG = {
     channelId: '3247666',
     readApiKey: 'S1P2IM4XU8SG73CJ',
-    refreshInterval: 15, // seconds
+    refreshInterval: 5, // seconds (faster for real-time feel)
     apiBaseUrl: 'https://api.thingspeak.com'
 };
 
@@ -84,32 +84,32 @@ function renderCandidateCards() {
 // ========================================
 async function fetchVotes() {
     updateStatus('loading', 'Fetching...');
-    
+
     try {
         const url = `${CONFIG.apiBaseUrl}/channels/${CONFIG.channelId}/feeds/last.json?api_key=${CONFIG.readApiKey}`;
         const response = await fetch(url);
-        
+
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
         }
-        
+
         const data = await response.json();
-        
+
         if (!data || Object.keys(data).length === 0) {
             showNoData();
             updateStatus('offline', 'No Data');
             return;
         }
-        
+
         // Parse votes from fields
         CANDIDATES.forEach(candidate => {
             const fieldKey = `field${candidate.field}`;
             votes[candidate.field] = parseInt(data[fieldKey]) || 0;
         });
-        
+
         updateDisplay();
         updateStatus('live', 'Live');
-        
+
     } catch (error) {
         console.error('Error fetching votes:', error);
         updateStatus('offline', 'Offline');
@@ -121,44 +121,44 @@ async function fetchVotes() {
 // ========================================
 function updateDisplay() {
     const totalVotes = Object.values(votes).reduce((sum, v) => sum + v, 0);
-    
+
     // Update total votes
     animateNumber(elements.totalVotes, totalVotes);
-    
+
     // Update last update time
     const now = new Date();
-    elements.lastUpdate.textContent = now.toLocaleTimeString('en-US', { 
-        hour: '2-digit', 
+    elements.lastUpdate.textContent = now.toLocaleTimeString('en-US', {
+        hour: '2-digit',
         minute: '2-digit',
-        hour12: false 
+        hour12: false
     });
-    
+
     // Sort candidates by votes to determine ranking
-    const sortedCandidates = [...CANDIDATES].sort((a, b) => 
+    const sortedCandidates = [...CANDIDATES].sort((a, b) =>
         (votes[b.field] || 0) - (votes[a.field] || 0)
     );
-    
+
     // Update each candidate card
     CANDIDATES.forEach(candidate => {
         const voteCount = votes[candidate.field] || 0;
         const percentage = totalVotes > 0 ? (voteCount / totalVotes) * 100 : 0;
         const rank = sortedCandidates.findIndex(c => c.field === candidate.field) + 1;
-        
+
         const card = document.getElementById(`card-${candidate.field}`);
         const votesEl = document.getElementById(`votes-${candidate.field}`);
         const progressEl = document.getElementById(`progress-${candidate.field}`);
         const percentEl = document.getElementById(`percent-${candidate.field}`);
         const rankEl = document.getElementById(`rank-${candidate.field}`);
-        
+
         // Remove loading state
         card.classList.remove('loading');
-        
+
         // Update values
         animateNumber(votesEl, voteCount);
         progressEl.style.width = `${percentage}%`;
         percentEl.textContent = `${percentage.toFixed(1)}%`;
         rankEl.textContent = getRankLabel(rank);
-        
+
         // Highlight leader
         if (rank === 1 && totalVotes > 0) {
             card.classList.add('leading');
@@ -166,7 +166,7 @@ function updateDisplay() {
             card.classList.remove('leading');
         }
     });
-    
+
     // Update winner banner
     if (totalVotes > 0) {
         const winner = sortedCandidates[0];
@@ -187,30 +187,30 @@ function getRankLabel(rank) {
 
 function animateNumber(element, targetValue) {
     const currentValue = parseInt(element.textContent) || 0;
-    
+
     if (currentValue === targetValue) {
         element.textContent = targetValue;
         return;
     }
-    
+
     const duration = 500;
     const startTime = performance.now();
-    
+
     function update(currentTime) {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        
+
         // Ease out cubic
         const easeProgress = 1 - Math.pow(1 - progress, 3);
         const value = Math.round(currentValue + (targetValue - currentValue) * easeProgress);
-        
+
         element.textContent = value;
-        
+
         if (progress < 1) {
             requestAnimationFrame(update);
         }
     }
-    
+
     requestAnimationFrame(update);
 }
 
@@ -239,21 +239,21 @@ function startAutoRefresh() {
     // Clear existing timers
     if (refreshTimer) clearInterval(refreshTimer);
     if (countdownTimer) clearInterval(countdownTimer);
-    
+
     // Reset countdown
     countdown = CONFIG.refreshInterval;
     elements.refreshCountdown.textContent = `${countdown}s`;
-    
+
     // Countdown timer (every second)
     countdownTimer = setInterval(() => {
         countdown--;
         elements.refreshCountdown.textContent = `${countdown}s`;
-        
+
         if (countdown <= 0) {
             countdown = CONFIG.refreshInterval;
         }
     }, 1000);
-    
+
     // Refresh timer
     refreshTimer = setInterval(() => {
         fetchVotes();
