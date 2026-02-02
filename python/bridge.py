@@ -240,6 +240,9 @@ def main():
     print("=" * 50)
     print()
     
+    # Generate frontend config.js from .env
+    generate_frontend_config()
+    
     # Sync votes from ThingSpeak (or fallback to local file)
     print("[SYNCING] Fetching current votes from ThingSpeak...")
     fetch_votes_from_thingspeak()

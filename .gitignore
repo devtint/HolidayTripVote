@@ -17,6 +17,7 @@ thingspeak.txt
 python/votes.csv
 python/votes.json
 
+
 # === PYTHON ===
 *.pyc
 __pycache__/

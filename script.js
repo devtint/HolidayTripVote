@@ -4,12 +4,12 @@
  */
 
 // ========================================
-// Configuration (READ-ONLY API)
+// Configuration (READ-ONLY API - safe to expose)
 // ========================================
 const CONFIG = {
     channelId: '3247666',
     readApiKey: 'S1P2IM4XU8SG73CJ',
-    refreshInterval: 5, // seconds (faster for real-time feel)
+    refreshInterval: 5,
     apiBaseUrl: 'https://api.thingspeak.com'
 };
 
