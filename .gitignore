@@ -1,52 +1,56 @@
 # ========================================
 # Voting System - GitIgnore
-# Only public UI files will be tracked
+# Arduino & Python code WILL be tracked
 # ========================================
 
-# === IGNORE ALL PRIVATE/SENSITIVE FILES ===
-
-# Arduino code (local only)
-/arduino/
-*.ino
-
-# Python bridge (contains API write key)
-/python/
-*.py
-*.pyc
-__pycache__/
+# === ENVIRONMENT & SECRETS ===
 .env
 *.env
-
-# API Keys and secrets
-thingspeak.txt
+.env.*
 secrets/
 *.key
 *.pem
+thingspeak.txt
 
-# Planning docs (local reference only)
+# === DATA FILES (Local Runtime Only) ===
+python/votes.csv
+python/votes.json
+
+# === PYTHON ===
+*.pyc
+__pycache__/
+*.pyo
+.Python
+venv/
+env/
+.venv/
+
+# === PLANNING DOCS ===
 plan.txt
 what we do.txt
 
-# Logs and data
-*.log
-*.csv
-votes.json
-
-# OS files
+# === OS FILES ===
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# IDE files
+# === IDE FILES ===
 .vscode/
 .idea/
 *.suo
 *.user
 
-# === WHAT GETS TRACKED ===
-# Public UI files in root:
+# === LOGS ===
+*.log
+
+# ========================================
+# WHAT GETS TRACKED:
+# ========================================
 # - index.html (dashboard UI)
 # - style.css (styling)
-# - script.js (frontend logic - READ API only)
+# - script.js (frontend logic)
 # - assets/ (images, icons)
-# - README.md (project description)
+# - README.md
+# - arduino/*.ino (Arduino firmware)
+# - python/bridge.py (Python bridge)
+# - python/requirements.txt
