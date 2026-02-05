@@ -31,28 +31,23 @@ load_dotenv(os.path.join(PROJECT_ROOT, '.env'))
 # Configuration (from .env)
 # ========================================
 THINGSPEAK_WRITE_API_KEY = os.getenv("THINGSPEAK_WRITE_API_KEY")
-THINGSPEAK_READ_API_KEY = os.getenv("THINGSPEAK_READ_API_KEY")
 THINGSPEAK_CHANNEL_ID = os.getenv("THINGSPEAK_CHANNEL_ID")
 
 # Validate required environment variables
-if not all([THINGSPEAK_WRITE_API_KEY, THINGSPEAK_READ_API_KEY, THINGSPEAK_CHANNEL_ID]):
+if not all([THINGSPEAK_WRITE_API_KEY, THINGSPEAK_CHANNEL_ID]):
     print("[ERROR] Missing required environment variables!")
     print("        Please ensure .env file exists in project root with:")
     print("        - THINGSPEAK_WRITE_API_KEY")
-    print("        - THINGSPEAK_READ_API_KEY")
     print("        - THINGSPEAK_CHANNEL_ID")
     sys.exit(1)
 
 THINGSPEAK_WRITE_URL = "https://api.thingspeak.com/update"
-THINGSPEAK_READ_URL = f"https://api.thingspeak.com/channels/{THINGSPEAK_CHANNEL_ID}/feeds/last.json"
 
 # Serial Configuration
 BAUD_RATE = 9600
-DEFAULT_COM_PORT = os.getenv("DEFAULT_COM_PORT", "COM3")
 
 # Upload Configuration
 UPLOAD_INTERVAL = 15  # ThingSpeak free tier minimum (cannot go lower)
-UPLOAD_AFTER_VOTE = True  # Upload immediately after vote (respecting interval)
 
 # Candidate Names (for logging)
 CANDIDATES = {
@@ -172,36 +167,8 @@ def auto_select_port():
 # ========================================
 # Functions
 # ========================================
-def fetch_votes_from_thingspeak():
-    """Fetch current vote totals from ThingSpeak"""
-    global votes
-    try:
-        url = f"{THINGSPEAK_READ_URL}?api_key={THINGSPEAK_READ_API_KEY}"
-        response = requests.get(url, timeout=10)
-        
-        if response.status_code == 200:
-            data = response.json()
-            if data and 'field1' in data:
-                votes[1] = int(data.get('field1') or 0)
-                votes[2] = int(data.get('field2') or 0)
-                votes[3] = int(data.get('field3') or 0)
-                votes[4] = int(data.get('field4') or 0)
-                print(f"[SYNCED] Loaded from ThingSpeak: {votes}")
-                return True
-            else:
-                print("[INFO] No data on ThingSpeak yet, starting fresh")
-        else:
-            print(f"[WARN] Could not fetch from ThingSpeak: HTTP {response.status_code}")
-    except Exception as e:
-        print(f"[WARN] Could not fetch from ThingSpeak: {e}")
-    
-    # Fallback to local file
-    load_votes_from_file()
-    return False
-
-
 def load_votes_from_file():
-    """Load saved votes from local JSON file (fallback)"""
+    """Load saved votes from local JSON file (source of truth)"""
     global votes
     try:
         if os.path.exists(VOTES_FILE):
