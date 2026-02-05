@@ -2,8 +2,10 @@
 Holiday Destination Voting System - Python Bridge
 Reads votes from Arduino via Serial and uploads to ThingSpeak
 
-Usage: python bridge.py [COM_PORT]
-Example: python bridge.py COM3
+Usage: 
+    python bridge.py           # Auto-detect Arduino port
+    python bridge.py auto      # Explicitly auto-detect
+    python bridge.py COM5      # Use specific port
 """
 
 import serial
@@ -72,6 +74,100 @@ last_upload_time = 0
 # ========================================
 VOTES_FILE = os.path.join(SCRIPT_DIR, "votes.json")
 LOG_FILE = os.path.join(SCRIPT_DIR, "votes.csv")
+
+# ========================================
+# Arduino Auto-Detection
+# ========================================
+# Common Arduino/USB-Serial chip signatures
+ARDUINO_SIGNATURES = [
+    "CH340",      # Common clone chip (Arduino Nano, Uno clones)
+    "CH341",      # Variant of CH340
+    "FT232",      # FTDI chip (some Nanos, Pro Minis)
+    "FT231",      # FTDI variant
+    "Arduino",    # Original Arduino boards
+    "USB Serial", # Generic USB-Serial adapters
+    "USB-SERIAL", # Windows variant
+    "ACM",        # Linux Arduino device
+    "ttyUSB",     # Linux USB serial
+    "ttyACM",     # Linux Arduino
+]
+
+
+def find_arduino_ports():
+    """
+    Scan all COM ports and return list of likely Arduino devices.
+    Returns list of (device, description) tuples.
+    """
+    arduino_ports = []
+    all_ports = serial.tools.list_ports.comports()
+    
+    for port in all_ports:
+        desc_upper = port.description.upper()
+        device_upper = port.device.upper()
+        
+        for signature in ARDUINO_SIGNATURES:
+            if signature.upper() in desc_upper or signature.upper() in device_upper:
+                arduino_ports.append((port.device, port.description))
+                break
+    
+    return arduino_ports
+
+
+def auto_select_port():
+    """
+    Automatically find and select Arduino port.
+    Returns selected port name or None if not found.
+    """
+    print("[SCANNING] Looking for Arduino devices...")
+    
+    arduino_ports = find_arduino_ports()
+    
+    if not arduino_ports:
+        # No Arduino found, show all available ports
+        print("[WARN] No Arduino devices detected automatically.")
+        all_ports = serial.tools.list_ports.comports()
+        if all_ports:
+            print("\nAvailable ports:")
+            for i, port in enumerate(all_ports, 1):
+                print(f"  {i}. {port.device}: {port.description}")
+            print()
+            
+            # Let user choose
+            try:
+                choice = input("Enter port number to use (or press Enter to exit): ").strip()
+                if choice:
+                    idx = int(choice) - 1
+                    if 0 <= idx < len(all_ports):
+                        return all_ports[idx].device
+            except (ValueError, IndexError):
+                pass
+        return None
+    
+    if len(arduino_ports) == 1:
+        # Single Arduino found - auto select
+        device, desc = arduino_ports[0]
+        print(f"[FOUND] {device}: {desc}")
+        return device
+    
+    # Multiple Arduinos found - let user choose
+    print(f"[FOUND] {len(arduino_ports)} Arduino devices detected:\n")
+    for i, (device, desc) in enumerate(arduino_ports, 1):
+        print(f"  {i}. {device}: {desc}")
+    print()
+    
+    try:
+        choice = input(f"Select Arduino (1-{len(arduino_ports)}): ").strip()
+        if choice:
+            idx = int(choice) - 1
+            if 0 <= idx < len(arduino_ports):
+                return arduino_ports[idx][0]
+    except (ValueError, IndexError):
+        pass
+    
+    # Default to first one
+    print(f"[DEFAULT] Using {arduino_ports[0][0]}")
+    return arduino_ports[0][0]
+
 
 # ========================================
 # Functions
@@ -227,25 +323,36 @@ def print_status():
 def main():
     global last_upload_time
     
-    # Get COM port from args or use default
-    com_port = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_COM_PORT
-    
     print("=" * 50)
     print("  HOLIDAY DESTINATION VOTING SYSTEM")
-    print("  Python Bridge v1.0")
+    print("  Python Bridge ")
     print("=" * 50)
-    print(f"  COM Port:    {com_port}")
+    
+    # Determine COM port
+    if len(sys.argv) > 1 and sys.argv[1].lower() != "auto":
+        # User specified a port explicitly
+        com_port = sys.argv[1]
+        print(f"  COM Port:    {com_port} (manual)")
+    else:
+        # Auto-detect Arduino
+        com_port = auto_select_port()
+        if not com_port:
+            print("[ERROR] No Arduino found. Please connect Arduino and try again.")
+            print("        Or specify port manually: python bridge.py COM5")
+            sys.exit(1)
+        print(f"  COM Port:    {com_port} (auto-detected)")
+    
     print(f"  Baud Rate:   {BAUD_RATE}")
     print(f"  ThingSpeak:  Channel {THINGSPEAK_CHANNEL_ID}")
     print("=" * 50)
     print()
     
-    # Generate frontend config.js from .env
-    generate_frontend_config()
+    # Generate frontend config.js from .env (not needed - frontend has hardcoded config)
+    # generate_frontend_config()
     
-    # Sync votes from ThingSpeak (or fallback to local file)
-    print("[SYNCING] Fetching current votes from ThingSpeak...")
-    fetch_votes_from_thingspeak()
+    # Load votes from LOCAL file (source of truth)
+    print("[LOADING] Reading votes from local storage...")
+    load_votes_from_file()
     print_status()
     
     # Initialize upload time
